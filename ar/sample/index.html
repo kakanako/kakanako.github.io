@@ -1,0 +1,26 @@
+<!--reference https://qiita.com/mkoku/items/c635566e829c303a7d3f-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"
+    <title>A-frameで簡単AR作成</title>
+    
+    <!-- ライブラリの読み込み -->
+    <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+  </head>
+  <body>
+    <!-- a-frameのVR空間にAR.jsを紐づける（デバックUIは非表示） -->
+    <a-scene embedded arjs="debugUIEnabled:false;">
+      <!-- マーカーを登録 （プリセットされている「hito」マーカー）-->
+      <a-marker preset="hiro">
+        <!-- マーカーの場所に箱を置く（見やすいようにワイヤーフレームを表示） -->
+        <a-box position="0 0.5 0" wireframe="true"></a-box>
+      </a-marker>
+
+      <!-- AR用のカメラを置く -->
+      <a-entity camera></a-entity>
+      
+    </a-scene>
+  </body>
+</html>
