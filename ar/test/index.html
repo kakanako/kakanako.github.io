@@ -1,26 +1,20 @@
-<!--reference https://qiita.com/mkoku/items/c635566e829c303a7d3f-->
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1"
-    <title>A-frameで簡単AR作成</title>
-    
-    <!-- ライブラリの読み込み -->
-    <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
-    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
-  </head>
-  <body>
-    <!-- a-frameのVR空間にAR.jsを紐づける（デバックUIは非表示） -->
-    <a-scene embedded arjs="debugUIEnabled:false;">
-      <!-- 検出するマーカーを登録 （プリセットされている「hito」マーカー）-->
+  <!--https://lesson-ar-js.glitch.me/-->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <!-- we import arjs version without NFT but with marker + location based support -->
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <body style="margin : 0px; overflow: hidden;">
+    <a-scene embedded arjs>
       <a-marker preset="hiro">
-        <!-- 検出したマーカーの場所に箱を置く（見やすいようにワイヤーフレームを表示） -->
-        <a-box position="0 0.5 0" wireframe="true" color="red"></a-box>
+        <a-entity
+          scale="0.03 0.03 0.03"
+          gltf-model="https://arjs-cors-proxy.herokuapp.com/https://raw.githack.com/AR-js-org/AR.js/master/aframe/examples/image-tracking/nft/trex/scene.gltf"
+          position="0 0 1"
+          rotation="-90 0 0"
+        ></a-entity>
       </a-marker>
-
-      <!-- AR用のカメラを置く -->
       <a-entity camera></a-entity>
-
     </a-scene>
   </body>
 </html>
