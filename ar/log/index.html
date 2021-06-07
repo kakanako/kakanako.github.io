@@ -14,8 +14,8 @@
         function getPos(){
             var position = new THREE.Vector3();
             var quaternion = new THREE.Quaternion();
-            console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
-            console.log('quaternion' + this.el.object3D.getWorldQuaternion(quaternion) + '\n');
+            console.log('position' + THREE.object3D().getWorldPosition(position) + '\n');
+            console.log('quaternion' + THREE.object3D().getWorldQuaternion(quaternion) + '\n');
         }
         // AFRAME.registerComponent('rotation-reader', {
         //     /**
