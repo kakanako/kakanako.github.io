@@ -13,7 +13,7 @@
         /* カメラの位置・回転を取得 */
         function getPos(){
             var position = new THREE.Vector3();
-            var quaternion = new THREE.quaternion();
+            var quaternion = new THREE.Quaternion();
             console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
             console.log('quaternion' + this.el.object3D.getWorldQuaternion(quaternion) + '\n');
         }
