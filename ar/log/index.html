@@ -7,14 +7,15 @@
     <!-- ライブラリの読み込み -->
     <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.min.js"></script>
 
     <script>
         /* カメラの位置・回転を取得 */
         function getPos(){
             var position = new THREE.Vector3();
-            //var quaternion = new THREE.quaternion();
+            var quaternion = new THREE.quaternion();
             console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
-            //console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
+            console.log('quaternion' + this.el.object3D.getWorldQuaternion(quaternion) + '\n');
         }
         // AFRAME.registerComponent('rotation-reader', {
         //     /**
