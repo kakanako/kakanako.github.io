@@ -9,13 +9,31 @@
     <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
 
     <script>
-        /* カメラの座標を取得 */
-        function getCameraPos(){
-            var x = $("#camera1").attr("position").x;
-            var y = $("#camera1").attr("position").y;
-            var z = $("#camera1").attr("position").z;
-            console.log('x:' + x + ' ' + 'y:' + x + ' ' + 'z:' + x + ' \n');
+        /* カメラの位置・回転を取得 */
+        function getPos(){
+            var position = new THREE.Vector3();
+            var quaternion = new THREE.quaternion();
+            console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
+             console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
         }
+        // AFRAME.registerComponent('rotation-reader', {
+        //     /**
+        //     * We use IIFE (immediately-invoked function expression) to only allocate one
+        //     * vector or euler and not re-create on every tick to save memory.
+        //     */
+        //     tick: (function () {
+        //         var position = new THREE.Vector3();
+        //         var quaternion = new THREE.Quaternion();
+
+        //         console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
+        //         console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
+        //         // return function () {
+        //         //     this.el.object3D.getWorldPosition(position);
+        //         //     this.el.object3D.getWorldQuaternion(quaternion);
+        //         //     // position and rotation now contain vector and quaternion in world space.
+        //         // };
+        //     })()
+        // });
     </script>
 
   </head>
