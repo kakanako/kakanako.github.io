@@ -6,53 +6,36 @@
     
     <!-- ライブラリの読み込み -->
     <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
-    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+    <!-- <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r127/three.min.js"></script>
 
     <script>
-        /* カメラの位置・回転を取得 */
-        // function getPos(){
-        //     var position = new THREE.Vector3();
-        //     var quaternion = new THREE.Quaternion();
-        //     //console.log('position' + THREE.object3D().getWorldPosition(position) + '\n');
-        //     //console.log('quaternion' + THREE.object3D().getWorldQuaternion(quaternion) + '\n');
-        //     return function () {
-        //         this.el.object3D.getWorldPosition(position);
-        //         this.el.object3D.getWorldQuaternion(quaternion);
-        //     }
-        // }
-        AFRAME.registerComponent('rotation-reader', {
-            /**
-            * We use IIFE (immediately-invoked function expression) to only allocate one
-            * vector or euler and not re-create on every tick to save memory.
-            */
-            tick: (function () {
-                var position = new THREE.Vector3();
-                var quaternion = new THREE.Quaternion();
-
-                console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
-                console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
-                // return function () {
-                //     this.el.object3D.getWorldPosition(position);
-                //     this.el.object3D.getWorldQuaternion(quaternion);
-                //     // position and rotation now contain vector and quaternion in world space.
-                // };
-            })()
-        });
+      var count = 0;
+      AFRAME.registerComponent('hello-world', {
+          init: function(){
+              console.log('Hello, World!');
+              //var position = new THREE.Vector3();
+              //console.log('position' + this.el.object3D.getWorldPosition(position) + '\n');
+          },
+          tick: function(){//毎フレーム呼ばれる
+            if(count > 50){
+              console.log(this.el.object3D.rotation);
+              console.log(this.el.object3D.position);
+              count = 0;
+            }
+            count++;
+          }
+      });
     </script>
 
   </head>
   <body>
     <!-- a-frameのVR空間にAR.jsを紐づける（デバックUI表示） -->
     <a-scene embedded arjs="debugUIEnabled:true;">
-      <!-- 検出するマーカーを登録 （プリセットされている「hito」マーカー）-->
-      <a-marker preset="hiro">
-        <!-- 検出したマーカーの場所に箱を置く（見やすいようにワイヤーフレームを表示） -->
-        <a-box position="0 0.5 0" wireframe="true" color="red"></a-box>
-      </a-marker>
-
-      <!-- AR用のカメラを置く -->
-      <a-entity camera id="camera1"></a-entity>
+      <a-box position="0 1 0" rotation="20 40 0" color="#4CC3D9"></a-box>
+      <a-sky color="#DDDDDD"></a-sky>
+      <a-camera position="0 1 4" cursor-visible="true" cursor-scale="2" cursor-color="#0095DD" cursor-opacity="0.5" hello-world><a-camera>
+      <a-light type="directional" color="#FFFFFF" intensity="0.5" position="-1 1 2"></a-light>
 
     </a-scene>
   </body>
