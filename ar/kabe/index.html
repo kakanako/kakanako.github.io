@@ -11,6 +11,52 @@
       AFRAME.registerComponent('test-camera', {
           init: function(){//初期化時に呼ばれる
               console.log('初期化');
+              //ジャイロセンサー確認
+              var isGyro = false;
+              if((window.DeviceOrientationEvent)&&('ontouchstart' in window)){
+                  isGyro = true;
+              }
+
+              if(!isGyro){//PCなどジャイロがない場合
+                confirm('ジャイロセンサー検知できませんでした。');
+              }
+              else{//ジャイロ持ちデバイス
+                //ジャイロ動作確認
+                var resGyro = false;
+                window.addEventListener("deviceorientation", doGyro,false);
+                function doGyro(){
+                  resGyro = true;
+                  window.addEventListener("deviceorientation",doGyro,false);
+                }
+
+                //数秒後に判定
+                if(resGyro){//ジャイロが動いた
+                  confirm('ジャイロセンサーが動作しました。');
+                }
+                else{//ジャイロもっているけど動作しなかった
+                  //iOS13+ 以降ならクリックイベントを要求
+                  if(typeof DeviceOrientationEvent.requestPermission == "function"){
+                    //ユーザアクションを得るための要素を表示
+                    cv._start.show();
+                    cv._start.on("click", function(){
+                      cv._start.hide();
+                      DeviceOrientationEvent.requestPermission().then(res => {
+                        if(res === "granted"){//許可された
+                          confirm('ジャイロセンサーが動作しました。');
+                        }
+                        else{//許可されなかった
+                          isGyro = false;
+                          confirm('ジャイロセンサー検知できませんでした。');
+                        }
+                      });
+                    });
+                  }
+                  else{//iOS13+じゃない
+                    confirm('iOS13以降のみジャイロに対応しています。ジャイロは動作しません。');
+                  }
+                }
+
+              }
           },
           tick: function(){//毎フレーム呼ばれる
             //if(count > 50){ //50回に1回、回転方向と位置をコンソール出力する。
