@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
+    <title>Sample Web App</title>
+
+    <script>
+      var count = 0;
+      AFRAME.registerComponent('test-camera', {
+          init: function(){//初期化時に呼ばれる
+              console.log('初期化');
+              //ジャイロセンサー確認
+              var isGyro = false;
+              if((window.DeviceOrientationEvent)&&('ontouchstart' in window)){
+                  isGyro = true;
+              }
+
+              if(!isGyro){//PCなどジャイロがない場合
+                confirm('ジャイロセンサー検知できませんでした。');
+              }
+              else{//ジャイロ持ちデバイス
+                //ジャイロ動作確認
+                var resGyro = false;
+                window.addEventListener("deviceorientation", doGyro,false);
+                function doGyro(){
+                  resGyro = true;
+                  window.addEventListener("deviceorientation",doGyro,false);
+                }
+
+                //数秒後に判定
+                if(resGyro){//ジャイロが動いた
+                  confirm('ジャイロセンサーが動作しました。');
+                }
+                else{//ジャイロもっているけど動作しなかった
+                  //iOS13+ 以降ならクリックイベントを要求
+                  if(typeof DeviceOrientationEvent.requestPermission == "function"){
+                    //ユーザアクションを得るための要素を表示
+                    cv._start.show();
+                    cv._start.on("click", function(){
+                      cv._start.hide();
+                      DeviceOrientationEvent.requestPermission().then(res => {
+                        if(res === "granted"){//許可された
+                          confirm('ジャイロセンサーが動作しました。');
+                        }
+                        else{//許可されなかった
+                          isGyro = false;
+                          confirm('ジャイロセンサー検知できませんでした。');
+                        }
+                      });
+                    });
+                  }
+                  else{//iOS13+じゃない
+                    confirm('iOS13以降のみジャイロに対応しています。ジャイロは動作しません。');
+                  }
+                }
+
+              }
+          },
+          tick: function(){//毎フレーム呼ばれる
+            //if(count > 50){ //50回に1回、回転方向と位置をコンソール出力する。
+            //  console.log(this.el.object3D.rotation);
+            //  console.log(this.el.object3D.position);
+            //  count = 0;
+            //}
+            //count++;
+          }
+      });
+    </script>
+
+  </head>
+  <body>
+    <a-scene>
+      <!--枠1--> <!--カメラに追従させる-->
+        <!--右-->
+        <a-box position="14 0 -25" color="#deb887" scale="15 29 1"></a-box>
+        <!--左-->
+        <a-box position="-14 0 -25" color="#deb887" scale="15 29 1"></a-box>
+        <!--上-->
+        <a-box position="0 10.75 -25" color="#deb887" scale="14 7.5 1"></a-box>
+        <!--下-->
+        <a-box position="0 -10.75 -25" color="#deb887" scale="14 7.5 1"></a-box>
+
+      <!--枠2--> <!--カメラに追従させる-->
+        <!--右-->
+        <a-box position="7 -5 0" color="#deb887" scale="8 0.1 15"></a-box>
+        <!--左-->
+        <a-box position="-7 -5 0" color="#deb887" scale="8 0.1 15"></a-box>
+        <!--上-->
+        <a-box position="0 -5 5" color="#deb887" scale="6 0.1 5"></a-box>
+        <!--下-->
+        <a-box position="0 -5 -5" color="#deb887" scale="6 0.1 5"></a-box>
+
+
+      <!--中心点-->  <!--カメラに追従させない-->
+      <!--<a-box position="0 0 -18" color="#dc143c" scale="0.5 0.5 0.5"></a-box>-->
+
+      <!--カメラ-->
+      <a-camera position="0 0 0" cursor-visible="true" cursor-scale="2" cursor-color="#0095DD" cursor-opacity="0.5" test-camera></a-camera>
+      <!-- <a-box position="5 0 -7" rotation="0 45 0" color="#4CC3D9"></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder> -->
+    </a-scene>
+    <!--中央点-->
+    <div id="center_point" style="margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-right: -50%;
+      color: #ff0000;
+      font-size: 50px;
+      transform: translate(-50%, -50%) ">●</div>
+  </body>
+</html>
