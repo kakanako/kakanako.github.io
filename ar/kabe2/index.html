@@ -4,12 +4,49 @@
     <meta charset="utf-8" />
     <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
     <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script>
+
     <title>Sample Web App</title>
 
     <script>
       var count = 0;
+      var COLORS = ['#000000', '#696969', '#808080', '#a9a9a9', '#dcdcdc', '#ffffff',
+                    '#b0c4de', '#4682b4', '#4169e1', '#191970', '#0000ff', '#00bfff', '#87ceeb', '#00ffff', '#48d1cc',
+                    '#008b8b', '#006400', '#008000', '#3cb371', '#66cdaa', '#98fb98','#556b2f',
+                    '#f0e68c', '#ffff00','#ffa500','#cd853f','#d2691e','#8b0000',
+                    '#ff7f50', '#ff0000','#c71585','#db7093','#ffc0cb','#d8bfd8','#ee82ee','#dda0dd','#9932cc','#800080'];
+      var ColorName = ['black', 'dimgray', 'gray', 'darkgray', 'gainsboro', 'white',
+                    'lightslategray', 'steelblue', 'royalblue', 'midnightblue', 'blue', 'deepskyblue', 'skyblue', 'cyan', 'mediumturquoise',
+                    'darkcyan', 'darkgreen', 'green', 'mediumseagreen', 'mediumaquamarine', 'palegreen','darkolivegreen',
+                    'khaki', 'yellow', 'orange','peru','chocolate','darkred',
+                    'coral','red','mediumvioletred','palevioletred','pink','thistle','violet','plum','darkorchid','purple'];
+      var i = -1;
+
+      var right1;
+      var right2;
+      var left1;
+      var left2;
+      var top1;
+      var top2;
+      var down1;
+      var down2;
+      var colornameid;
+
       AFRAME.registerComponent('test-camera', {
           init: function(){//初期化時に呼ばれる
+            //要素の取得
+            if(count == 0){
+              right1 = document.getElementById('right1');
+              right2 = document.getElementById('right2');
+              left1 = document.getElementById('left1');
+              left2 = document.getElementById('left2');
+              top1 = document.getElementById('top1');
+              top2 = document.getElementById('top2');
+              down1 = document.getElementById('down1');
+              down2 = document.getElementById('down2');
+              colornameid = document.getElementById('colorName');
+              count++;
+            }
+
               console.log('初期化');
               //ジャイロセンサー確認
               var isGyro = false;
@@ -55,8 +92,25 @@
                     confirm('iOS13以降のみジャイロに対応しています。ジャイロは動作しません。');
                   }
                 }
-
               }
+
+              //クリックイベント-クリックすると枠の色を変える
+              this.el.addEventListener('click', function(evt){
+                i = (i + 1) % COLORS.length;
+                
+                right1.setAttribute('color', COLORS[i]);
+                right2.setAttribute('color', COLORS[i]);
+                left1.setAttribute('color', COLORS[i]);
+                left2.setAttribute('color', COLORS[i]);
+                top1.setAttribute('color', COLORS[i]);
+                top2.setAttribute('color', COLORS[i]);
+                down1.setAttribute('color', COLORS[i]);
+                down2.setAttribute('color', COLORS[i]);
+
+                colornameid.innerHTML = (i+1) + ':' + ColorName[i] + ' ' + COLORS[i];
+            })
+
+
           },
           tick: function(){//毎フレーム呼ばれる
             //if(count > 50){ //50回に1回、回転方向と位置をコンソール出力する。
@@ -65,51 +119,83 @@
             //  count = 0;
             //}
             //count++;
+
+  
+            
           }
       });
     </script>
 
   </head>
   <body>
+
+    <!--色選択-->
+    <!--<div id="colorSelect1" class="colorSelect">
+        <p>枠の色を変更する</p>
+        <input type="color" id="color" name="color" value="#deb887">
+        <button>test</button>
+    </div>-->
+
     <a-scene>
       <!--枠1--> <!--カメラに追従させる-->
         <!--右-->
-        <a-box position="14 0 -25" color="#deb887" scale="15 29 1"></a-box>
+        <a-box position="14 0 -25" color="#deb887" scale="15 29 1" id="right1"></a-box>
         <!--左-->
-        <a-box position="-14 0 -25" color="#deb887" scale="15 29 1"></a-box>
+        <a-box position="-14 0 -25" color="#deb887" scale="15 29 1" id="left1"></a-box>
         <!--上-->
-        <a-box position="0 10.75 -25" color="#deb887" scale="14 7.5 1"></a-box>
+        <a-box position="0 10.75 -25" color="#deb887" scale="14 7.5 1" id="top1"></a-box>
         <!--下-->
-        <a-box position="0 -10.75 -25" color="#deb887" scale="14 7.5 1"></a-box>
+        <a-box position="0 -10.75 -25" color="#deb887" scale="14 7.5 1" id="down1"></a-box>
 
       <!--枠2--> <!--カメラに追従させる-->
         <!--右-->
-        <a-box position="7 -15 0" color="#deb887" scale="8 0.1 15"></a-box>
+        <a-box position="7 -15 0" color="#deb887" scale="8 0.1 15" id="right2"></a-box>
         <!--左-->
-        <a-box position="-7 -15 0" color="#deb887" scale="8 0.1 15"></a-box>
+        <a-box position="-7 -15 0" color="#deb887" scale="8 0.1 15" id="left2"></a-box>
         <!--上-->
-        <a-box position="0 -15 5" color="#deb887" scale="6 0.1 5"></a-box>
+        <a-box position="0 -15 5" color="#deb887" scale="6 0.1 5" id="top2"></a-box>
         <!--下-->
-        <a-box position="0 -15 -5" color="#deb887" scale="6 0.1 5"></a-box>
+        <a-box position="0 -15 -5" color="#deb887" scale="6 0.1 5" id="down2"></a-box>
 
 
       <!--中心点-->  <!--カメラに追従させない-->
       <!--<a-box position="0 0 -18" color="#dc143c" scale="0.5 0.5 0.5"></a-box>-->
 
       <!--カメラ-->
-      <a-camera position="0 0 0" cursor-visible="true" cursor-scale="2" cursor-color="#0095DD" cursor-opacity="0.5" test-camera></a-camera>
+      <a-camera position="0 0 0" cursor-visible="true" cursor-scale="2" cursor-color="#0095DD" cursor-opacity="0.5" test-camera>
+        <a-cursor id="crawling-cursor" 
+        class="ignore-ray" 
+        look-at="0 0 0" 
+        material="color:red; opacity: 0.7"></a-cursor><!--中央カーソル-->
+      </a-camera>
       <!-- <a-box position="5 0 -7" rotation="0 45 0" color="#4CC3D9"></a-box>
       <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
       <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder> -->
+
+
+
     </a-scene>
+    
+    
+
     <!--中央点-->
-    <div id="center_point" style="margin: 0;
+    <!--<div id="center_point" style="margin: 0;
       position: absolute;
       top: 50%;
       left: 50%;
       margin-right: -50%;
       color: #ff0000;
       font-size: 50px;
-      transform: translate(-50%, -50%) ">●</div>
+      transform: translate(-50%, -50%) ">●</div>-->
+    <div id="colorName" style="margin: 0;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      margin-right: -50%;
+      color: #ff0000;
+      font-size: 50px;
+      transform: translate(-50%, -50%) ">0:burlywood #deb887</div>
+    <!--色名表示-->
+    <!--<div id="colorName" style="background-color: #e0ffff; border-radius: 5px; border: 3px dashed #add8e6;font-size: 20px; padding: 20px; width: 130px; z-index:10000;">burlywood #deb887</div>-->
   </body>
 </html>
