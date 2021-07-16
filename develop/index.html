@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>WebXR Cursor Menu</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <!-- <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.5.0/aframe/build/aframe-ar.js"></script> -->
+    
+    <script>
+    AFRAME.registerComponent('change-color-on-hover', {
+        schema: {
+        color: {default: 'red'}
+        },
+
+        init: function () {
+        var data = this.data;
+        var el = this.el;  // <a-box>
+        var defaultColor = el.getAttribute('material').color;
+
+        el.addEventListener('mouseenter', function () {
+            el.setAttribute("material","color: " + data.color.toString());
+        });
+
+        el.addEventListener('mouseleave', function () {
+            el.setAttribute("material","color: " + defaultColor.toString());
+        });
+        }
+    });
+    </script>
+  </head>
+  <body>
+    <a-scene vr-mode-ui="enabled: true">
+      <!-- Style the button with images or whatever. -->
+<!--       <a-box color="#EF2D5E" height="0.2" width="0.2" depth="0.2" position="0 1 -1" change-color-on-hover="color: blue"></a-box> -->
+      
+      <a-text id="mainMenu" value="Menu" align="center" color="#fff" visible="true" position="-1 2 -2"
+                geometry="primitive: plane; width: 1.0; height: 0.3" material="color: #009900"
+                change-color-on-hover="color: #006600"></a-text>
+      
+      <a-text id="cursorMenu" value="Cursor" align="center" color="#FFF" visible="false" position="-0.75 1.65 -2"
+                geometry="primitive: plane; width: 1.0; height: 0.3" material="color: #009900"
+                change-color-on-hover="color: #006600"></a-text>
+      <a-text id="exitMenu" value="x" height="4" width="4" align="center" color="red" visible="false" position="-0.25 1.85 -1.99"
+                geometry="primitive: plane; width: 0.15; height: 0.15" material="color: #009900"
+                change-color-on-hover="color: #006600"></a-text>
+            
+      <!-- <a-entity camera="active: true" look-controls wasd-controls position="0 1.6 0" data-aframe-default-camera></a-entity> -->
+      <!-- <a-camera><a-cursor id="cursor" color="red"></a-cursor></a-camera> -->
+      <a-entity position="0 1.6 3">
+        <a-entity camera look-controls>
+            <a-entity
+            id="cursor"
+            animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+            animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+            animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1"
+            cursor="fuse: true;"
+            material="color: red;"
+            position="0 0 -3"
+            geometry="primitive: ring; radiusInner: 0.03; radiusOuter: 0.06;"></a-entity>
+        </a-entity>
+      </a-entity>
+    
+    <script>
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+      
+    //   const el = document.documentElement;
+    //   el.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+
+      var scene = document.querySelector("a-scene");
+      var mainMenu = document.querySelector("#mainMenu");
+      var cursorMenu = document.querySelector("#cursorMenu");
+      var exitMenu = document.querySelector("#exitMenu");
+      var cursor = document.querySelector("#cursor");
+      var expired=true;
+      var expiryDate=null;
+      var menuIsOpen=false;
+      var colorTextsCreated=false;
+      
+       var colors = {"aqua":"#00ffff","black":"#000000","blue":"#0000ff","brown":"#a52a2a",
+                     "coral":"#ff7f50","darkblue":"#00008b","darkgray":"#a9a9a9","darkgreen":"#006400",
+                     "fuchsia":"#ff00ff","gray":"#808080","green":"#008000","lavender":"#e6e6fa",
+                     "lightblue":"#add8e6","maroon":"#800000","olive":"#808000","orange":"#ffa500",
+                      "pink":"#ffc0cb","purple":"#800080","red":"#ff0000","royalblue":"#4169e1",
+                      "teal":"#008080",turquoise:"#40e0d0","violet":"#ee82ee","yellow":"#ffff00"};
+
+      mainMenu.addEventListener("click", function() {
+        if (menuIsOpen) return;
+        menuIsOpen=true;
+        cursorMenu.setAttribute("visible", "true" ); 
+        exitMenu.setAttribute("visible", "true" );
+      });
+          
+      exitMenu.addEventListener("click", function() {
+        menuIsOpen = false;
+        cursorMenu.setAttribute("visible", "false" ); 
+        exitMenu.setAttribute("visible", "false" );
+        if (colorTextsCreated) {
+            for (let i = 0; i < Object.keys(colors).length; i++) {
+            var elem = document.getElementById("color_" + i.toString());
+            elem.setAttribute("visible", "false");
+            }
+        }
+      });
+      
+      cursorMenu.addEventListener("click", function() {
+        if (!menuIsOpen) return;
+        
+        if (!colorTextsCreated) {
+          let nCols = 4;
+          let colorHeight = 0.25
+          let colorWidth = 0.35
+          let posx = -0.25
+          let posy = 1.45
+          let posz = -1.99
+          const keys = Object.keys(colors);
+          for (let i = 0; i < keys.length; i++) {
+            let col = Math.floor(i / nCols);
+            let row = i % nCols;
+            let colorText = document.createElement("a-text");
+            colorText.setAttribute("id", "color_" + i.toString());
+            let name = keys[i];
+            colorText.setAttribute("value", name);
+            colorText.setAttribute("align", "center");
+            if (name == "lavender") {
+              colorText.setAttribute("color", "violet");
+            } else if (name == "lightblue") {
+              colorText.setAttribute("color", "blue");
+            } else if (name == "pink") {
+              colorText.setAttribute("color", "fuchsia");
+            } else if (name == "yellow") {
+              colorText.setAttribute("color", "brown");
+            } else {
+              colorText.setAttribute("color", "white");
+            }
+
+            let x = posx + colorWidth*row;
+            let y = posy - colorHeight*col;
+            colorText.setAttribute("position", x.toString() + " " + y.toString() + " " + posz.toString());
+            colorText.setAttribute("height", "1");
+            colorText.setAttribute("width", "1");
+            colorText.setAttribute("wrap-count", "25");
+            colorText.setAttribute("geometry","primitive: plane; width: " + colorWidth.toString() + "; height: " + colorHeight.toString());
+            colorText.setAttribute("material", "color: ".concat(colors[name]));
+
+
+            colorText.addEventListener("mouseenter", function() {
+              if (!menuIsOpen) return;
+              let colorVal = colorText.getAttribute("value")
+              colorText.setAttribute("color",colors[colorVal])
+              colorText.setAttribute("material","color: #fff")
+              expiryDate = Date.now() + 1490;
+              expired=false;
+              sleep(1500).then(() => {
+                if (!expired & Date.now() > expiryDate) {
+                  cursor.setAttribute("material", "color: ".concat([colorVal]).concat("; shader: flat"));
+                }
+              });
+            });
+
+            colorText.addEventListener("mouseleave", function() {
+              if (!menuIsOpen) return;
+              expired=true;
+              let colorVal = colorText.getAttribute("value")
+              if (colorVal == "lavender") {
+                colorText.setAttribute("color", "violet");
+              } else if (colorVal == "lightblue") {
+                colorText.setAttribute("color", "blue");
+              } else if (colorVal == "pink") {
+                colorText.setAttribute("color", "fuchsia");
+              } else if (colorVal == "yellow") {
+                colorText.setAttribute("color", "brown");
+              } else {
+                colorText.setAttribute("color", "white");
+              }
+              colorText.setAttribute("material", "color: ".concat(colors[colorVal]));
+            });
+
+            scene.appendChild(colorText);
+          }
+          colorTextsCreated = true;
+        } else {
+          for (let i = 0; i < Object.keys(colors).length; i++) {
+              var elem = document.getElementById("color_" + i.toString());
+              elem.setAttribute("visible", "true");
+            }
+        }
+      });
+      
+    </script>
+  </body>
+</html>
