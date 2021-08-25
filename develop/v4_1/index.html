@@ -1,0 +1,66 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <script src="https://aframe.io/releases/1.0.1/aframe.min.js"></script>
+    <script>
+        // Stream from camera 
+        navigator.mediaDevices.getUserMedia({audio: false, video:  {
+                facingMode: "environment",
+            }})
+        .then(stream => {
+            let $video = document.querySelector('video')
+            $video.srcObject = stream
+            $video.onloadedmetadata = () => {
+            $video.play()
+            }
+        })
+
+        // Z Distance Selection
+        function zDistanceChanged(value)
+        {
+            // for debugging
+            //alert(value);
+            var vid = document.querySelector('#avid')
+            vid.setAttribute('position', {x: 0, y: 0, z: value})
+        }
+    </script>      
+</head>
+<body>
+    <a-assets>
+        <video id="cam" playsinline></video0>
+      </a-assets>
+
+      <a-scene vr-mode-ui="enabled: true">
+        <a-camera position="0 0 0">
+            <a-entity cursor="fuse: true; fuseTimeout: 500"
+                position="0 0 -0.6"
+                geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
+                material="color: green; shader: flat">
+            </a-entity>
+            <a-video id="avid" src="#cam" position="0 0 -0.61"></a-video>
+        </a-camera>
+    </a-scene>
+
+    <div id="center_point" style="margin: 0;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    margin-right: -50%;
+    color: black;
+    font-size: 15px;
+    transform: translate(-50%, -50%) ">
+        <label for="dist">Choose z distance:</label>
+
+        <select name="dist" id="dist" onchange="zDistanceChanged(this.value);">
+            <option value="-0.3">-0.31</option>
+            <option value="-0.4">-0.41</option>
+            <option value="-0.5">-0.51</option>
+            <option value="-0.6">-0.61</option>
+            <option value="-0.7">-0.71</option>
+            <option value="-0.8">-0.81</option>
+            <option value="-0.9">-0.91</option>
+            <option value="-0.9" selected="selected">-1</option>
+        </select>
+    </div>
+</body>
+</html>

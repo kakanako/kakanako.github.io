@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="javascripts/room.js"></script>
+    <script src="javascripts/adjust.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <title>Sample AR</title>
+</head>
+<body>
+      <video id="cam" playsinline
+      style="position: fixed;
+      right: 0;
+      bottom: 0;
+      min-width: 100%; 
+      min-height: 100%;"></video>
+
+      <a-scene id="ascene" vr-mode-ui="enabled: false" visible="true">
+        <!--r-->
+        <a-entity id="roomrig" rotation="0 0 0" position="0 1.6 0">
+            <a-sphere id="centerpivot" rotation="0 0 0" position="0 0 -20" radius="0.5" color="#EF2D5E"></a-sphere>
+            <a-entity id="pivot" rotation="0 0 0" position="0 0 -20">
+                <a-plane id="frontright" color="green" material="side: double" visible="false"></a-plane>
+                <!--l-->
+                <a-plane id="frontleft" color="green" material="side: double" visible="false"></a-plane>
+                <!--u-->
+                <a-plane id="frontup" color="green" material="side: double" visible="false"></a-plane>
+                <!--d-->
+                <a-plane id="frontdown" color="green" material="side: double" visible="false"></a-plane>
+                <!--ceiling-->
+                <a-plane id="ceiling" color="blue" rotation="90 0 0" material="side: double" visible="false"></a-plane>
+                <!--floor-->
+                <a-plane id="floor" color="violet" rotation="90 0 0" material="side: double" visible="false"></a-plane>
+                <!--l wall-->
+                <a-plane id="leftwall" color="pink" rotation="0 90 0" material="side: double" visible="false"></a-plane>
+                <!--r wall-->
+                <a-plane id="rightwall" color="orange" rotation="0 90 0" material="side: double" visible="false"></a-plane>
+                <!--back wall-->
+                <a-plane id="backwall" color="brown" material="side: double" visible="false"></a-plane>
+                
+                <a-plane id="plane" position="0 0 0" rotation="0 0 0" width="8" height="8" material="color: red; wireframe: true"></a-plane>
+            </a-entity>
+        </a-entity>
+
+        <a-camera id="acam" position="0 1.6 0" user-height="0" rotation="0 0 0" rotate-test>
+            <a-entity cursor="fuse: true; fuseTimeout: 500"
+                position="0 0 -0.6"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                material="color: red; shader: flat">
+            </a-entity>
+        </a-camera>
+
+    </a-scene>
+
+    <div id="controls" style="margin: 0;
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    color: black;
+    font-size: 15px;">
+        <label class="label toggle">
+            Centralized Mode
+            <input id="centralizedToggle" type="checkbox" class="toggle_input" onclick="centralizedMode()"/>
+            <div class="toggle-control"></div>
+        </label>
+        <br/>
+        <br/>
+        <label class="label toggle">
+            Adjustment Mode
+            <input id="adjustmentToggle" type="checkbox" class="toggle_input" onclick="adjustmentMode()"/>
+            <div class="toggle-control"></div>
+        </label>
+        <br/><br/>
+        <fieldset id="adjust">
+            <legend>Adjust View Area</legend>
+            <button onclick="reset()">Reset</button>
+            </br>
+            <button onclick="rotatez()">Tilt</button> <!--Rotate Z-->
+            </br>
+            <button onclick="addy()">Move Up</button><!-- Plane Y ++ -->
+            <button onclick="minusy()">Move Down</button><!-- Plane Y -- -->
+            </br>
+            <button onclick="minusx()">Move Left</button><!-- Plane X -- -->
+            <button onclick="addx()">Move Right</button><!-- Plane X ++ -->
+            </br>
+            <button onclick="addz()">Move Forward</button><!-- Plane Z ++ -->
+            <button onclick="minusz()">Move Back</button><!-- Plane Z -- -->
+            </br>
+            <button onclick="minuswidth()">Decrease Width</button>
+            <button onclick="addwidth()">Increase Width</button>
+            </br>
+            <button onclick="minusheight()">Decrease Height</button>
+            <button onclick="addheight()">Increase Height</button>
+        </fieldset>
+        <fieldset id="create">
+            <legend>Create Walls</legend>
+            <button onclick="black()">Black Room</button>
+            <button onclick="colored()">Colored Room</button>
+            </br>
+            <button onclick="view()">View Full Room</button>
+            <button onclick="stopview()">Stop View</button>       
+        </fieldset>
+    </div>
+</body>
+</html>
