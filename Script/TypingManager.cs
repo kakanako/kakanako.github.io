@@ -96,25 +96,6 @@ public class TypingManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // 今見ている文字とキーボードから打った文字が同じかどうか　Input.inputStringに入力した文字が入らない。-> OnGUI()メソッドで実施する形に変更した。
-        /*
-        if (Input.GetKeyDown(nQR[indexOfString].ToString()))
-        {
-            Debug.Log("成功した文字：" + Input.inputString);
-            Correct();// 正解
-            if(indexOfString >= nQR.Length)//１文が終わったら次の問題へ
-            {
-                QutputQuestion();
-            }
-        }
-        else if(Input.anyKeyDown){// 失敗
-            Debug.Log("失敗した文字：" + Input.inputString);
-            Mistake();
-        }
-        else
-        {
-            ;
-        }*/
 
     }
 
@@ -142,14 +123,14 @@ public class TypingManager : MonoBehaviour
     // タイピングの正誤判定
     int InputKey(string inputChar){
         if (inputChar == "\0")
-            {
-                return 0;// 何もしない
-            }
-            if (inputChar == nQR[indexOfString].ToString())
-            {
-                return 1;// 正解時
-            }
-            return 2;// 間違った時
+        {
+            return 0;// 何もしない
+        }
+        if (inputChar == nQR[indexOfString].ToString())
+        {
+            return 1;// 正解時
+        }
+        return 2;// 間違った時
     }
 
     // 新しい問題を表示するメソッド
@@ -196,9 +177,6 @@ public class TypingManager : MonoBehaviour
         string MistakeKey = GetStringFromKeyCode(Event.current.keyCode);
         char MistakeKeyChar = GetCharFromKeyCode(Event.current.keyCode);
 
-        //Debug.Log("失敗の処理");
-        //mistakeN += MistakeKey.Length; //同時押しに対応
-
         // タイピングミス数のカウント
         if (MistakeKey == null)
         {
@@ -225,41 +203,6 @@ public class TypingManager : MonoBehaviour
             Debug.Log("間違って入力した文字は" + MistakeKeyChar);
             UII.text = correctString + "<color=#ff0000ff>" + MistakeKeyChar + "</color>";
         }
-
-        /* //string版 WebGLにビルドすると、赤字にならないw
-        // 間違った数をカウント（同時押しも対応させる）
-        //MistakeKeyにはNULLが入ってくる場合があるので条件を分ける。
-        if (MistakeKey == null)
-        {
-            //mistakeN++;//素直にプラスする
-            Debug.Log("NULLなので何もしない");
-        }
-        else
-        {
-            Debug.Log("失敗の処理");
-            mistakeN += MistakeKey.Length; //同時押しに対応
-        }
-        UImistake.text = "不正解文字数：" + mistakeN.ToString();
-        // 正解率の計算
-        CorrectAnswerRate();
-
-        if (MistakeKey != "")
-        {
-            Debug.Log("間違って入力した文字は" + MistakeKey);
-            UII.text = correctString + "<color=#ff0000ff>" + MistakeKey + "</color>";
-        }
-
-        */
-
-        // 失敗した文字を表示する(赤文字で。)
-        //if (Input.inputString != "")
-        //(checkString != null) && (checkString.Length != 0)
-        //if (MistakeKey != "")
-        //{
-        //    Debug.Log("間違って入力した文字は" + MistakeKey);
-        //    //UII.text = correctString + "<color=#ff0000ff>" + Input.inputString + "</color>";
-        //    UII.text = correctString + "<color=#ff0000ff>" + MistakeKey + "</color>";
-        //}
     }
 
     // 正解率の計算処理
